@@ -21,11 +21,12 @@ class RWMRecurrenceRuleBase: XCTestCase {
         return res
     }()
 
-    func run(rule: String, mode: RWMRuleScheduler.Mode = .standard, start: Date, max: Int = 200, exclusionDates: [Date]? = nil, results: [String]) {
+    func run(rule: String, mode: RWMRuleScheduler.Mode = .standard, dtStart: Date?, enumerationStartDate: Date? = nil, max: Int = 200, exclusionDates: [Date]? = nil, results: [String]) {
+        let enumerationStartDate = enumerationStartDate ?? dtStart ?? Date()
         run(rule: rule) { (rule) in
             var dates = [Date]()
             let scheduler = RWMRuleScheduler(rule: rule, exclusionDates: exclusionDates, mode: mode)
-            scheduler.enumerateDates(startingFrom: start, using: { (date, stop) in
+            scheduler.enumerateDates(startingFrom: dtStart, enumerationStartDate: enumerationStartDate, using: { (date, stop) in
                 if let date = date {
                     dates.append(date)
                     if dates.count >= max {
@@ -39,11 +40,12 @@ class RWMRecurrenceRuleBase: XCTestCase {
         }
     }
 
-    func run(rule: String, start: Date, last: Date? = nil, count: Int, max: Int = 200) {
+    func run(rule: String, dtStart: Date, enumerationStartDate: Date? = nil, last: Date? = nil, count: Int, max: Int = 200) {
+        let enumerationStartDate = enumerationStartDate ?? dtStart
         run(rule: rule) { (rule) in
             var dates = [Date]()
             let scheduler = RWMRuleScheduler(rule: rule)
-            scheduler.enumerateDates(startingFrom: start, using: { (date, stop) in
+            scheduler.enumerateDates(startingFrom: dtStart, enumerationStartDate: enumerationStartDate, using: { (date, stop) in
                 if let date = date {
                     dates.append(date)
                     if dates.count >= max {
@@ -53,7 +55,7 @@ class RWMRecurrenceRuleBase: XCTestCase {
             })
 
             XCTAssert(dates.count == count, "Should be \(count) dates - \(dates.count)")
-            XCTAssert(dates.first == start, "Wrong first date")
+            XCTAssert(dates.first == dtStart, "Wrong first date")
             if let last = last {
                 XCTAssert(dates.last == last, "Wrong last date \(dates.last?.description ?? "??"), expected \(last)")
             }

@@ -14,9 +14,10 @@ class RWMRuleDailyIterator: RWMRuleIterator {
         self.exclusionDates = exclusionDates
     }
 
-    func enumerateDates(with rule: RWMRecurrenceRule, startingFrom start: Date, calendar: Calendar, using block: EnumerationBlock) {
+    func enumerateDates(with rule: RWMRecurrenceRule, startingFrom dtStart: Date?, enumerationStartDate: Date, calendar: Calendar, using block: EnumerationBlock) {
         // TODO - support BYSETPOS
-        var result = start // first result is the start date
+        let start = dtStart ?? enumerationStartDate
+        var result = start
         let interval = rule.interval ?? 1
         var count = 0
         var done = false
@@ -39,7 +40,7 @@ class RWMRuleDailyIterator: RWMRuleIterator {
 
             // send current result
             var stop = false
-            if !isExclusionDate(date: result, calendar: calendar) {
+            if !isExclusionDate(date: result, calendar: calendar) && result >= enumerationStartDate {
                 block(result, &stop)
             } else {
                 count -= 1
