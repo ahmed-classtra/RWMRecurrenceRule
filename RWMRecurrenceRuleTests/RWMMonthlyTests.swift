@@ -255,6 +255,20 @@ class RWMMonthlyTests: RWMRecurrenceRuleBase {
         )
     }
 
+    func testMonthly22() {
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 16, hour: 9))!
+        run(rule: "RRULE:FREQ=MONTHLY;COUNT=3", dtStart: nil, enumerationStartDate: enumerationStartDate, results:
+            ["2018-05-16T09:00:00", "2018-06-16T09:00:00", "2018-07-16T09:00:00"]
+        )
+    }
+
+    func testMonthly23() {
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 16, hour: 9))!
+        run(rule: "RRULE:FREQ=MONTHLY;BYMONTHDAY=2;COUNT=3", dtStart: nil, enumerationStartDate: enumerationStartDate, results:
+            ["2018-06-02T09:00:00", "2018-07-02T09:00:00", "2018-08-02T09:00:00"]
+        )
+    }
+
     // MARK: - Exdates
 
     func testMonthly01e() {

@@ -609,6 +609,24 @@ class RWMYearlyTests: RWMRecurrenceRuleBase {
             ["2018-05-17T09:00:00", "2019-05-17T09:00:00", "2020-05-17T09:00:00"])
     }
 
+    func testYearly48() {
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 17, hour: 9))!
+        run(rule: "RRULE:FREQ=YEARLY;COUNT=3", dtStart: nil, enumerationStartDate: enumerationStartDate, results:
+            ["2018-05-17T09:00:00", "2019-05-17T09:00:00", "2020-05-17T09:00:00"])
+    }
+
+    func testYearly49() {
+        // Start 20180517T090000
+        // Every Tuesday and Thursday in April and October
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 17, hour: 9))!
+        run(rule: "RRULE:FREQ=YEARLY;BYMONTH=4,10;BYDAY=TU,TH;COUNT=14", dtStart: nil, enumerationStartDate: enumerationStartDate, results:
+            ["2018-10-02T09:00:00", "2018-10-04T09:00:00", "2018-10-09T09:00:00",
+             "2018-10-11T09:00:00", "2018-10-16T09:00:00", "2018-10-18T09:00:00", "2018-10-23T09:00:00",
+             "2018-10-25T09:00:00", "2018-10-30T09:00:00", "2019-04-02T09:00:00", "2019-04-04T09:00:00",
+             "2019-04-09T09:00:00", "2019-04-11T09:00:00", "2019-04-16T09:00:00"]
+        )
+    }
+
     // TODO - there should be tests with the 5 combinations of 4 "BY" clauses and 1 with all 5 (not counting BYSETPOS)
 
     // With 4

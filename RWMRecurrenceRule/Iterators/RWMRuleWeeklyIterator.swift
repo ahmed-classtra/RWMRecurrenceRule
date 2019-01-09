@@ -97,8 +97,10 @@ class RWMRuleWeeklyIterator: RWMRuleIterator {
                     }
 
                     if iterationCount == 0 {
-                        weekDates = weekDates.filter { $0 > start }
-                        weekDates.insert(start, at: 0)
+                        weekDates = weekDates.filter { $0 >= enumerationStartDate }
+                        if let dtStart = dtStart, !weekDates.contains(dtStart) {
+                            weekDates.insert(dtStart, at: 0)
+                        }
                     }
 
                     weekDates.sort()

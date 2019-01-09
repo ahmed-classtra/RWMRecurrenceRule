@@ -278,6 +278,57 @@ class RWMDailyTests: RWMRecurrenceRuleBase {
         )
     }
 
+    func testDaily23() {
+        // Start 20180517T090000
+        // Enumeration start 20181001T090000
+        let dtStart = calendar.date(from: DateComponents(year: 2018, month: 5, day: 17, hour: 9))!
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 19, hour: 9))!
+        run(rule: "RRULE:FREQ=DAILY;COUNT=8", dtStart: dtStart, enumerationStartDate: enumerationStartDate, results:
+            ["2018-05-19T09:00:00", "2018-05-20T09:00:00",
+             "2018-05-21T09:00:00", "2018-05-22T09:00:00", "2018-05-23T09:00:00", "2018-05-24T09:00:00",
+             "2018-05-25T09:00:00", "2018-05-26T09:00:00"]
+        )
+    }
+
+    func testDaily24() {
+        // Start 20180517T090000
+        // Enumeration start 20181001T090000
+        let dtStart = calendar.date(from: DateComponents(year: 2018, month: 5, day: 17, hour: 9))!
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 15, hour: 9))!
+        run(rule: "RRULE:FREQ=DAILY;COUNT=10", dtStart: dtStart, enumerationStartDate: enumerationStartDate, results:
+            ["2018-05-17T09:00:00", "2018-05-18T09:00:00", "2018-05-19T09:00:00", "2018-05-20T09:00:00",
+             "2018-05-21T09:00:00", "2018-05-22T09:00:00", "2018-05-23T09:00:00", "2018-05-24T09:00:00",
+             "2018-05-25T09:00:00", "2018-05-26T09:00:00"]
+        )
+    }
+
+    func testDaily25() {
+        // Enumeration start 20181001T090000
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 17, hour: 9))!
+        run(rule: "RRULE:FREQ=DAILY;INTERVAL=2;COUNT=4", dtStart: nil, enumerationStartDate: enumerationStartDate, results:
+            ["2018-05-17T09:00:00", "2018-05-19T09:00:00", "2018-05-21T09:00:00", "2018-05-23T09:00:00"]
+        )
+    }
+
+    func testDaily26() {
+        // Enumeration start 20181001T090000
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 17, hour: 9))!
+        run(rule: "RRULE:FREQ=DAILY;COUNT=10", dtStart: nil, enumerationStartDate: enumerationStartDate, results:
+            ["2018-05-17T09:00:00", "2018-05-18T09:00:00", "2018-05-19T09:00:00", "2018-05-20T09:00:00",
+             "2018-05-21T09:00:00", "2018-05-22T09:00:00", "2018-05-23T09:00:00", "2018-05-24T09:00:00",
+             "2018-05-25T09:00:00", "2018-05-26T09:00:00"]
+        )
+    }
+
+    func testDaily27() {
+        // Start 20180517T090000
+        // Every 3 days in May and June
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 4, day: 17, hour: 9))!
+        run(rule: "RRULE:FREQ=DAILY;BYMONTH=5,6;INTERVAL=3;COUNT=4", dtStart: nil, enumerationStartDate: enumerationStartDate, results:
+            ["2018-05-01T09:00:00", "2018-05-03T09:00:00", "2018-05-06T09:00:00", "2018-05-09T09:00:00"]
+        )
+    }
+
     // MARK: - EXDATEs
 
     func testDaily19() {

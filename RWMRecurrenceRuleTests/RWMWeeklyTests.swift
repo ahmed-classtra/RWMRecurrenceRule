@@ -192,6 +192,15 @@ class RWMWeeklyTests: RWMRecurrenceRuleBase {
         )
     }
 
+    func testWeekly16() {
+        // Enumeration start 20180517T090000 (Thursday)
+        // Weekly on Friday.
+        let enumerationStartDate = calendar.date(from: DateComponents(year: 2018, month: 5, day: 17, hour: 9))!
+        run(rule: "RRULE:FREQ=WEEKLY;BYDAY=FR;COUNT=4", dtStart: nil, enumerationStartDate: enumerationStartDate, results:
+            ["2018-05-18T09:00:00", "2018-05-25T09:00:00", "2018-06-01T09:00:00", "2018-06-08T09:00:00"]
+        )
+    }
+
     // MARK: - Exdates
 
     func testWeekly01e() {

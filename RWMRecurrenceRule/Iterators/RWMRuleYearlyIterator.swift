@@ -220,8 +220,10 @@ class RWMRuleYearlyIterator: RWMRuleIterator {
                     }
 
                     if iterationCount == 0 {
-                        yearDates = yearDates.filter { $0 > start }
-                        yearDates.insert(start, at: 0)
+                        yearDates = yearDates.filter { $0 >= enumerationStartDate }
+                        if let dtStart = dtStart, !yearDates.contains(dtStart) {
+                            yearDates.insert(dtStart, at: 0)
+                        }
                         yearDates.sort()
                     }
 

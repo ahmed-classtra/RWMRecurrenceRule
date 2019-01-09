@@ -137,8 +137,10 @@ class RWMRuleMonthlyIterator: RWMRuleIterator {
                             }
 
                             if iterationCount == 0 {
-                                monthDates = monthDates.filter { $0 > start }
-                                monthDates.insert(start, at: 0)
+                                monthDates = monthDates.filter { $0 >= enumerationStartDate }
+                                if let dtStart = dtStart, !monthDates.contains(dtStart) {
+                                    monthDates.insert(dtStart, at: 0)
+                                }
                                 monthDates.sort()
                             }
                         }

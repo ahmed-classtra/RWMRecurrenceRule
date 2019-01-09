@@ -40,7 +40,7 @@ class RWMRuleDailyIterator: RWMRuleIterator {
 
             // send current result
             var stop = false
-            if !isExclusionDate(date: result, calendar: calendar) && result >= enumerationStartDate {
+            if doesDateMatchRule(date: result, rule: rule, calendar: calendar, daysOfTheWeek: daysOfTheWeek, dtStart: dtStart) && result >= enumerationStartDate {
                 block(result, &stop)
             } else {
                 count -= 1
@@ -53,53 +53,62 @@ class RWMRuleDailyIterator: RWMRuleIterator {
             while attempts < 1000 {
                 attempts += 1
                 // Calculate the next date by adding "interval" days
-                if let date = calendar.date(byAdding: .day, value: interval, to: result) {
-                    result = date
-                    guard !isExclusionDate(date: result, calendar: calendar) else { continue }
-
-                    if let months = rule.monthsOfTheYear {
-                        let rmonth = calendar.component(.month, from: result)
-                        if !months.contains(rmonth) {
-                            continue
-                        }
-                    }
-                    if let monthDays = rule.daysOfTheMonth {
-                        var found = false
-                        let rday = calendar.component(.day, from: result)
-                        for monthDay in monthDays {
-                            if monthDay > 0 {
-                                if monthDay == rday {
-                                    found = true
-                                    break
-                                }
-                            } else {
-                                let range = calendar.range(of: .day, in: .month, for: result)!
-                                let lastDay = range.count
-                                if lastDay + monthDay + 1 == rday {
-                                    found = true
-                                    break
-                                }
-                            }
-                        }
-                        if !found {
-                            continue
-                        }
-                    }
-                    if let days = daysOfTheWeek {
-                        let rdow = calendar.component(.weekday, from: result)
-                        if !days.contains(rdow) {
-                            continue
-                        }
-                    }
-
-                    count += 1
-                    break
-                } else {
+                guard let date = calendar.date(byAdding: .day, value: interval, to: result) else {
                     // This shouldn't happen since we should always be able to add x days to the current result
                     done = true
                     break
                 }
+                result = date
+                guard doesDateMatchRule(date: result, rule: rule, calendar: calendar, daysOfTheWeek: daysOfTheWeek, dtStart: dtStart) else { continue }
+                count += 1
+                break
             }
         } while !done
+    }
+
+    /// Return true if the given date matches the given rule and DTSTART.
+    private func doesDateMatchRule(date: Date, rule: RWMRecurrenceRule, calendar: Calendar, daysOfTheWeek: [Int]?, dtStart: Date?) -> Bool {
+        guard !isExclusionDate(date: date, calendar: calendar) else { return false }
+        if date == dtStart {
+            return true
+        }
+
+        return doesDateMatchMonthsOfYearRule(rule: rule, date: date, calendar: calendar)
+            && doesDateMatchDaysOfMonthRule(rule: rule, date: date, calendar: calendar)
+            && doesDateMatchDaysOfWeekRule(daysOfTheWeek: daysOfTheWeek, date: date, calendar: calendar)
+    }
+
+    private func doesDateMatchMonthsOfYearRule(rule: RWMRecurrenceRule, date: Date, calendar: Calendar) -> Bool {
+        guard let months = rule.monthsOfTheYear else { return true }
+        let rmonth = calendar.component(.month, from: date)
+        return months.contains(rmonth)
+    }
+
+    private func doesDateMatchDaysOfMonthRule(rule: RWMRecurrenceRule, date: Date, calendar: Calendar) -> Bool {
+        guard let monthDays = rule.daysOfTheMonth else { return true }
+        var found = false
+        let rday = calendar.component(.day, from: date)
+        for monthDay in monthDays {
+            if monthDay > 0 {
+                if monthDay == rday {
+                    found = true
+                    break
+                }
+            } else {
+                let range = calendar.range(of: .day, in: .month, for: date)!
+                let lastDay = range.count
+                if lastDay + monthDay + 1 == rday {
+                    found = true
+                    break
+                }
+            }
+        }
+        return found
+    }
+
+    private func doesDateMatchDaysOfWeekRule(daysOfTheWeek: [Int]?, date: Date, calendar: Calendar) -> Bool {
+        guard let days = daysOfTheWeek else { return true }
+        let rdow = calendar.component(.weekday, from: date)
+        return days.contains(rdow)
     }
 }
