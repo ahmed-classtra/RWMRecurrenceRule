@@ -41,9 +41,13 @@ class RWMRuleWeeklyIterator: RWMRuleIterator {
             let firstDayOfTheWeek = rule.firstDayOfTheWeek?.rawValue ?? calendar.firstWeekday
             // Convert the standard 1=Sun,2=Mon,...,7=Sat values into the associated weekday index based on the first day of the week
             let range = firstDayOfTheWeek..<(firstDayOfTheWeek + 7)
-            for wd in range {
-                if daysOfTheWeek.contains(where: { $0 == wd % 7 }) {
-                    weekdays.append(wd - firstDayOfTheWeek)
+            if firstDayOfTheWeek == 1 {
+                weekdays = daysOfTheWeek.map { $0 - 1 }
+            } else {
+                for wd in range {
+                    if daysOfTheWeek.contains(where: { $0 == wd % 7 }) {
+                        weekdays.append(wd - firstDayOfTheWeek)
+                    }
                 }
             }
             // TODO: Refactor this. This ugly fix makes testWeekly12 to pass.
