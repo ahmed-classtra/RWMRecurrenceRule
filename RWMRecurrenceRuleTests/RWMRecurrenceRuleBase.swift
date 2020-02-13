@@ -8,6 +8,7 @@
 
 import XCTest
 import EventKit
+import RWMRecurrenceRule
 
 // Helpful site to verify results: http://worthfreeman.com/projects/online-icalendar-recurrence-event-parser/
 

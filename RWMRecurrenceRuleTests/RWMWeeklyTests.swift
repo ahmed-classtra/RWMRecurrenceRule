@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import RWMRecurrenceRule
 
 class RWMWeeklyTests: RWMRecurrenceRuleBase {
     // ----------- WEEKLY ------------

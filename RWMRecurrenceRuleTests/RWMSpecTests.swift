@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import RWMRecurrenceRule
 
 class RWMSpecTests: RWMRecurrenceRuleBase {
     // The following tests are based on samples rules from https://icalendar.org/iCalendar-RFC-5545/3-8-5-3-recurrence-rule.html
