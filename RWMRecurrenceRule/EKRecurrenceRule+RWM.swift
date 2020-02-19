@@ -21,7 +21,7 @@ public extension EKRecurrenceRule {
     /// See `RWMRecurrenceRule isEventKitSafe` for details about RRULE values safe to be used with Event Kit.
     ///
     /// - Parameter rrule: The RRULE string in the form RRULE:FREQUENCY=...
-    public convenience init?(recurrenceWith rrule: String) {
+    convenience init?(recurrenceWith rrule: String) {
         if let rule = RWMRuleParser().parse(rule: rrule) {
             self.init(recurrenceWith: rule)
         } else {
@@ -34,7 +34,7 @@ public extension EKRecurrenceRule {
     /// Note that Event Kit may not properly process some recurrence rules.
     ///
     /// - Parameter rule: The RWMRecurrenceRule.
-    public convenience init?(recurrenceWith rule: RWMRecurrenceRule) {
+    convenience init?(recurrenceWith rule: RWMRecurrenceRule) {
         var daysOfTheWeek: [EKRecurrenceDayOfWeek]?
         if let dows = rule.daysOfTheWeek {
             daysOfTheWeek = []
@@ -66,7 +66,7 @@ public extension EKRecurrenceRule {
     }
 
     /// Returns the RRULE representation. If the sender can't be processed, the result is `nil`.
-    public var rrule: String? {
+    var rrule: String? {
         if let rule = RWMRecurrenceRule(recurrenceWith: self) {
             let parser = RWMRuleParser()
 
@@ -81,7 +81,7 @@ public extension RWMRecurrenceRule {
     /// Creates a new RWMRecurrenceRule from an EKRecurrenceRule. If `rule` can't be converted, the result is `nil`.
     ///
     /// - Parameter rule: The EKRecurrenceRule
-    public init?(recurrenceWith rule: EKRecurrenceRule) {
+    init?(recurrenceWith rule: EKRecurrenceRule) {
         var daysOfTheWeek: [RWMRecurrenceDayOfWeek]?
         if let dows = rule.daysOfTheWeek {
             daysOfTheWeek = []
@@ -157,7 +157,7 @@ public extension RWMRecurrenceRule {
     /// Yearly with an interval, specific months, and 1st, 2nd, 3rd, 4th, 5th, or last day. Example: `RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=9,10,11;BYDAY=SU,MO,TU,WE,TH,FR,SA;BYSETPOS=2`
     /// Yearly with an interval, specific months, and 1st, 2nd, 3rd, 4th, 5th, or last weekday. Example: `RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=9,10,11;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=2`
     /// Yearly with an interval, specific months, and 1st, 2nd, 3rd, 4th, 5th, or last weekend. Example: `RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=9,10,11;BYDAY=SU,SA;BYSETPOS=-1`
-    public var isEventKitSafe: Bool {
+    var isEventKitSafe: Bool {
         get {
             switch frequency {
             case .daily:

@@ -21,7 +21,7 @@ public extension Calendar {
     ///   - year: A calendar year.
     ///   - month: A month within the calendar year. The value of `0` means the month is ignored. Negative values start from the last month of the year. `-1` is the last month. `-2` is the next-to-last month, etc.
     /// - Returns: A range from `1` through `n` where `n` is the number of times the given weekday appears in the year or month of the year. If `month` is out of range for the year, the result is `nil`.
-    public func range(of weekday: Int, in year: Int, month: Int = 0) -> ClosedRange<Int>? {
+    func range(of weekday: Int, in year: Int, month: Int = 0) -> ClosedRange<Int>? {
         if month > 0 {
             let comps = DateComponents(year: year, month: month, weekday: weekday, weekdayOrdinal: -1)
             if let date = self.date(from: comps) {
@@ -103,11 +103,11 @@ public extension Calendar {
         return newComponents
     }
 
-    public func date(fromRelative components: DateComponents) -> Date? {
+    func date(fromRelative components: DateComponents) -> Date? {
         return self.date(from: self.relativeComponents(from: components))
     }
 
-    public func date(_ date: Date, matchesRelativeComponents components: DateComponents) -> Bool {
+    func date(_ date: Date, matchesRelativeComponents components: DateComponents) -> Bool {
         return self.date(date, matchesComponents: self.relativeComponents(from: components))
     }
 }
