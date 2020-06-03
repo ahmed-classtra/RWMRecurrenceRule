@@ -385,4 +385,25 @@ class RWMWeeklyTests: RWMRecurrenceRuleBase {
              "2019-01-19T09:00:00", "2019-01-26T09:00:00"]
         )
     }
+    
+    func testWeekly14() {
+        // Start 20181117T090000
+        // Weekly with with exdates.
+        let laTimeZone = TimeZone(identifier: "America/Los_Angeles")!
+        let utcTimeZone = TimeZone(identifier: "UTC")!
+        
+        let start = calendar.date(from: DateComponents(timeZone: laTimeZone, year: 2020, month: 3, day: 4, hour: 9))!
+        run(rule: "RRULE:FREQ=WEEKLY;WKST=SU;COUNT=2;BYDAY=WE", start: start, results:
+            ["2020-03-04T09:00:00", "2020-03-11T09:00:00"]
+        )
+        
+        // TODO: Fix these tests for someone not currently in US
+        run(rule: "RRULE:FREQ=WEEKLY;WKST=SU;COUNT=2;BYDAY=WE", timeZone: utcTimeZone, start: start, results:
+            ["2020-03-04T09:00:00", "2020-03-11T10:00:00"]
+        )
+        
+        run(rule: "RRULE:FREQ=WEEKLY;WKST=SU;COUNT=2;BYDAY=WE", timeZone: laTimeZone, start: start, results:
+            ["2020-03-04T09:00:00", "2020-03-11T09:00:00"]
+        )
+    }
 }

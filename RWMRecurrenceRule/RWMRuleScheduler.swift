@@ -22,11 +22,12 @@ public class RWMRuleScheduler {
     private let calendar: Calendar
     private let iterator: RWMRuleIterator
 
-    public init(rule: RWMRecurrenceRule, exclusionDates: [Date]? = nil, mode: Mode = .standard) {
+    public init(rule: RWMRecurrenceRule, timeZone: TimeZone? = nil, exclusionDates: [Date]? = nil, mode: Mode = .standard) {
         self.rule = rule
 
         var calendar = Calendar(identifier: .iso8601)
         calendar.firstWeekday = rule.firstDayOfTheWeek?.rawValue ?? 2
+        calendar.timeZone = timeZone ?? calendar.timeZone
         self.calendar = calendar
 
         switch rule.frequency {

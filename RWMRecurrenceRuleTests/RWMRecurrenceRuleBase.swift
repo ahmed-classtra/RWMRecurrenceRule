@@ -22,10 +22,10 @@ class RWMRecurrenceRuleBase: XCTestCase {
         return res
     }()
 
-    func run(rule: String, mode: RWMRuleScheduler.Mode = .standard, start: Date, max: Int = 200, exclusionDates: [Date]? = nil, results: [String]) {
+    func run(rule: String, timeZone: TimeZone? = nil, mode: RWMRuleScheduler.Mode = .standard, start: Date, max: Int = 200, exclusionDates: [Date]? = nil, results: [String]) {
         run(rule: rule) { (rule) in
             var dates = [Date]()
-            let scheduler = RWMRuleScheduler(rule: rule, exclusionDates: exclusionDates, mode: mode)
+            let scheduler = RWMRuleScheduler(rule: rule, timeZone: timeZone, exclusionDates: exclusionDates, mode: mode)
             scheduler.enumerateDates(startingFrom: start, using: { (date, stop) in
                 if let date = date {
                     dates.append(date)
